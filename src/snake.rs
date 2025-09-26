@@ -55,6 +55,7 @@ pub(crate) struct Snake {
     pub snake: VecDeque<Coords>,
     pub snake_set: HashSet<Coords>,
     pub food: Coords,
+    pub quit: bool,
 }
 
 impl Snake {
@@ -73,6 +74,7 @@ impl Snake {
             dir: Direction::R,
             food: food_coords,
             snake_set: HashSet::new(),
+            quit: false,
         }
     }
     pub fn change_direction(&mut self, dir: Direction) {
