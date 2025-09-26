@@ -55,7 +55,6 @@ pub(crate) struct Snake {
     pub snake: VecDeque<Coords>,
     pub snake_set: HashSet<Coords>,
     pub food: Coords,
-    pub quit: bool,
 }
 
 impl Snake {
@@ -74,7 +73,6 @@ impl Snake {
             dir: Direction::R,
             food: food_coords,
             snake_set: HashSet::new(),
-            quit: false,
         }
     }
     pub fn change_direction(&mut self, dir: Direction) {
@@ -94,13 +92,14 @@ impl Snake {
     // returns
     pub fn next(&mut self) -> Option<GameOver> {
         let next = self.dir.next(self.snake[0], self.max_x, self.max_y);
-        self.snake.push_front(next);
-        self.snake_set.insert(self.snake[0]);
         let hold = self.snake.pop_back().unwrap();
         self.snake_set.remove(&hold);
-        if self.snake.len() != self.snake_set.len() {
+        if self.snake_set.contains(&next) {
+            // panic!("You Lost");
             return Some(GameOver::Loss);
         }
+        self.snake.push_front(next);
+        self.snake_set.insert(self.snake[0]);
         if self.food == self.snake[0] {
             self.snake_set.insert(hold);
             self.snake.push_back(hold);
